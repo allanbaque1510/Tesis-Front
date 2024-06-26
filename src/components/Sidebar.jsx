@@ -1,28 +1,34 @@
 import React from 'react'
-import {AppstoreOutlined ,BarChartOutlined,CloudOutlined,ShopOutlined,TeamOutlined,UploadOutlined,UserOutlined,VideoCameraOutlined,
-} from '@ant-design/icons';
-import { Menu} from 'antd';
-
+import { useNavigate } from "react-router-dom";
+import {BarChartOutlined,ProductOutlined,SettingOutlined, UploadOutlined} from '@ant-design/icons';
+import { Menu } from 'antd';
 const Sidebar = () => {
-    const items = [
-        {icon:<BarChartOutlined/>,link:'/dashboard',label:'Dashboard',key:'1'},
-        {icon:<UserOutlined/>,link:'/',label:'Usuario',key:'2'},
-        {icon:<VideoCameraOutlined/>,link:'/dasboard',label:'xd',key:'3'},
-        {icon:<UploadOutlined/>,link:'/subir_documento',label:'Subir documento',key:'4'},
-        {icon:<CloudOutlined/>,link:'/dasboard',label:'xd',key:'5'},
-        {icon:<AppstoreOutlined/>,link:'/dasboard',label:'xd',key:'6'},
-        {icon:<TeamOutlined/>,link:'/dasboard',label:'xd',key:'7'},
-        {icon:<ShopOutlined/>,link:'/dasboard',label:'xd',key:'8'},
-      ];
-      const itemsMenu =items.map((x,index)=>{
-        return {
-          key:`menu_${index}`,
-          icon:x.icon,
-          label:<a href={x.link}>{x.label}</a>
-        }
-      })
+  const navigate = useNavigate();
+
+  const items = [
+    { icon: <ProductOutlined />, link: '/dashboard', label: 'Dashboard', key: '1' },
+    {
+       label: 'Tasa de deserción', key: '2', children: [
+        { icon: <UploadOutlined />, link: '/tasa_desercion/subir_documento', label: 'Subir documento', key: '2.1' },
+        { icon: <BarChartOutlined />, link: '/tasa_desercion/datos', label: 'Visualizar Datos', key: '2.2' },
+      ]
+    },
+    {
+      label: 'Tasa de Titulación', key: '3', children: [
+       { icon: <UploadOutlined />, link: '/tasa_titulacion/subir_documento', label: 'Subir documento', key: '3.1' },
+       { icon: <BarChartOutlined />, link: '/tasa_titulacion/datos', label: 'Visualizar Datos', key: '3.2' },
+     ]
+   },
+    { icon: <SettingOutlined />, link: '/configuracion', label: 'Configuracion', key: '13' },
+
+  ];
+
+  const seleccionado = (data) => {
+    navigate(data.item.props.link)
+  }
+
   return (
-    <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} items={itemsMenu} />
+    <Menu theme="dark" onSelect={seleccionado} mode="inline"  items={items} />
   )
 }
 

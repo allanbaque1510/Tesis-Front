@@ -25,3 +25,12 @@ export const loadingOn = () => ({
 export const loadingOff = () => ({
   type: "LOADING_OFF",
 });
+
+export const activarModalResult = (datos) => ({
+  type: "MODAL_RESULT_ON",
+  payload: datos,
+});
+
+export const ocultarModalResult = () => ({
+  type: "MODAL_RESULT_OFF",
+});

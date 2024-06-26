@@ -2,7 +2,11 @@ import React, { lazy } from "react";
 
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(()=>import('./pages/Dashboard'))
-const SubirDocumento= lazy(()=>import('./pages/SubirDoc'))
+const SubirDocumentoTasaDesercion= lazy(()=>import('./pages/TasaDesercion/SubirDocTasaDesercion'))
+const VisualizarDatosTD= lazy(()=>import('./pages/TasaDesercion/VisualizarDatosTD'))
+const Configuracion=  lazy(()=>import('./pages/Configuracion'))
+const VisualizarDatosTT = lazy(()=>import('./pages/TasaTitulacion/VisualizarDatosTT'))
+const SubirDocTasaTitulacion = lazy(()=>import('./pages/TasaTitulacion/SubirDocTasaTitulacion'))
 export const directorioLogin = () => {
   return[ 
     {
@@ -10,7 +14,7 @@ export const directorioLogin = () => {
       key:"login",
       element:Login
     }
-  ];
+  ];  
 };
 
 export const directorioRutasProtegidas=()=>{
@@ -20,9 +24,31 @@ export const directorioRutasProtegidas=()=>{
       key:"dashboard",
       element:Dashboard
     },{
-      path:'subir_documento',
-      key:"subir_documento",
-      element:SubirDocumento
+      path:'tasa_desercion/subir_documento',
+      key:"tasa_desercion/subir_documento",
+      element:SubirDocumentoTasaDesercion
+    },
+    {
+      path:'tasa_desercion/datos',
+      key:"tasa_desercion/datos",
+      element:VisualizarDatosTD
+    },
+    
+    {
+      path:'tasa_titulacion/datos',
+      key:"tasa_titulacion/datos",
+      element:VisualizarDatosTT
+    },
+    
+    {
+      path:'tasa_titulacion/subir_documento',
+      key:"tasa_titulacion/subir_documento",
+      element:SubirDocTasaTitulacion
+    },
+    {
+      path:'configuracion',
+      key:"configuracion",
+      element:Configuracion
     }
   ];
 }

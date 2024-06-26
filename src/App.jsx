@@ -6,7 +6,6 @@ import {directorioLogin,directorioRutasProtegidas} from './Directorio';
 import Loading from './components/Loading';
 import './resource/css/main.css'
 import Contenedor from './pages/Contenedor';
-import Cargando from './components/Cargando';
 function App() {
   return (
     <BrowserRouter>

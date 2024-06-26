@@ -57,7 +57,8 @@ export const AuthProvider = ({children}) => {
                 } 
                 dispatch(login(res.data));
             } catch (error) {
-                console.log(error)
+                Cookies.remove("token");
+                dispatch(logout());
             }
         }else{
             navigate('/login');

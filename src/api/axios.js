@@ -6,21 +6,13 @@ const instancia = axios.create({
   withCredentials: true,
 });
 
-instancia.interceptors.request.use(
-  (config) => {
-    const cookie = Cookies.get().token;
-    if (cookie) {
-      config.headers.Authorization = `Bearer ${cookie}`;
-    }
-
-    // Agregar el encabezado 'Content-Type' para indicar que se envía un formulario de datos
-    config.headers["Content-Type"] = "multipart/form-data";
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+instancia.interceptors.request.use((config) => {
+  const cookie = Cookies.get().token;
+  if (cookie) {
+    config.headers.Authorization = `Bearer ${cookie}`;
   }
-);
+  config.headers["Content-Type"] = "multipart/form-data";
+  return config;
+});
 
 export default instancia;

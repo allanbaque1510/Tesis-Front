@@ -4,10 +4,11 @@ import { useAuth } from '../context/AuthContext';
 import { Layout, theme ,Button} from 'antd';
 import Sidebar from '../components/Sidebar';
 import Cargando from '../components/Cargando';
+import MessageResult from '../components/MessageResult';
+
 const { Header, Content, Footer, Sider } = Layout;
 
 const Contenedor = ({children}) => {
-  
   const {logOut}=useAuth();
   const {
     token: { colorBgContainer },
@@ -17,6 +18,7 @@ const Contenedor = ({children}) => {
   const [collapsed, setCollapsed] = useState(false);
   return (
     <Layout>
+      <MessageResult/>
       <Cargando state={false}/>
       <Sider
         style={{
@@ -57,12 +59,11 @@ const Contenedor = ({children}) => {
       <Button  onClick={()=>logOut()}>Cerrar session</Button>
 
     </Header>
-    <div style={{maxHeight:'100vh', overflowY:'auto'}}>
-
+    <div style={{maxHeight:'calc(100vh - 50px)', overflowY:'auto'}}>
         <Content
           style={{
             margin: '1px 16px 0',
-            overflow: 'initial',
+            overflow: 'auto',
           }}
         >
           {children}

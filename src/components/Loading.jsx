@@ -12,7 +12,6 @@ const Loading = () => {
     height: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     zIndex: 9999,
-    display: 'flex',
     color: 'black',
     justifyContent: 'center',
     alignItems: 'center',
