@@ -1,7 +1,8 @@
 import React, { useEffect,useState } from 'react'
 import UtilService from '../api/Services/UtilService'
 import { useDispatch,useSelector } from 'react-redux';
-import {Row, Select, Col, Form, Alert} from 'antd'
+import { DotChartOutlined } from '@ant-design/icons';
+import {Row, Select, Col, Form, Alert,Card,Skeleton} from 'antd'
 import { loadingOn,activarModalResult, loadingOff } from "../redux/reducer";
 import { Tag } from 'antd';
 import Medidor from '../components/Medidor';
@@ -71,7 +72,6 @@ const Dashboard = () => {
     getComboCarreras()
   }, [])
 
-
  
   return (
     <div>
@@ -109,21 +109,30 @@ const Dashboard = () => {
                   </Col>
                   </Row>
                   </Form>
-        {dashboard?.desercion &&
-          <Medidor
-            target={dashboard?.desercion?.nivelacion - dashboard?.desercion?.actual}
-            total={dashboard?.desercion?.nivelacion}
-            title='Tasa de deserción'
-          />
-        }
-
-        {dashboard?.titulacion &&
-          <Medidor
-            target={ dashboard?.titulacion?.titulados}
-            total={dashboard?.titulacion?.nivelacion}
-            title='Tasa de Titulacion'
-          />
-        }
+        <Row>
+          <Col xs={24} sm={16} md={12} lg={10} xl={7}  style={{borderRadius: 12, boxShadow: '0 4px 8px rgba(0,0,0,0.1)', margin:'10px', textAlign:'center' }} >
+            <Card title='Tasa de deserción' style={{height:'100%'}}>
+              {dashboard?.desercion ?
+                <Medidor
+                  target={dashboard?.desercion?.nivelacion - dashboard?.desercion?.actual}
+                  total={dashboard?.desercion?.nivelacion}
+                />
+                :<Skeleton />
+              }
+            </Card>
+          </Col>
+          <Col xs={24} sm={16} md={12} lg={10} xl={7}  style={{borderRadius: 12, boxShadow: '0 4px 8px rgba(0,0,0,0.1)', margin:'10px', textAlign:'center' }} >
+            <Card title='Tasa de Titulacion' style={{height:'100%'}}>
+              {dashboard?.titulacion ?
+                <Medidor
+                  target={ dashboard?.titulacion?.titulados}
+                  total={dashboard?.titulacion?.nivelacion}
+                />
+                :<Skeleton />
+              }
+            </Card>
+          </Col>
+        </Row>
     </div>
   )
 }

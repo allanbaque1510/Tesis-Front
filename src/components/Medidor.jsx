@@ -3,10 +3,8 @@ import { Gauge } from '@ant-design/plots';
 
 const Medidor = (props) => {
     const config = {
-        width: 320,
-        height: 320,
-        autoFit: true,
-        title:props.title,
+        width: 250,
+        height: 250,
         data:{
           target: props.target,
           total: props.total,

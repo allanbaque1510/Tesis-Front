@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
-import { message, Upload,Button } from 'antd';
+import { message, Upload,Button,Row,Col } from 'antd';
 import { useDispatch,useSelector } from 'react-redux';
 
 const DraggerComponent = (props) => {
@@ -16,8 +16,13 @@ const DraggerComponent = (props) => {
   
   const onRemove = ()=>{
     setArchivo({})
+    props.onArchivoChange({});
   } 
   const handleFileChange = (info) => {
+    if (info.file.status === 'removed') {
+      return;
+    }
+
     const nuevoArchivo = info.file.originFileObj;
     setArchivo(nuevoArchivo)
     props.onArchivoChange(nuevoArchivo);
@@ -33,8 +38,6 @@ const DraggerComponent = (props) => {
     customRequest,
   };
   
-
-  
   return (
     <>
 
@@ -47,7 +50,9 @@ const DraggerComponent = (props) => {
         Solo permite subir un solo archivo archivo de tipo excel 
         </p>
       </Dragger>
-      <Button onClick={props.funcionEnviarDatos} >Registrar datos</Button>
+      <Row justify='end' style={{marginBlock:'20px'}}>
+        <Button type='primary' disabled={!Object.keys(archivo).length > 0}  onClick={props.funcionEnviarDatos} >Registrar datos</Button>
+      </Row>
     </>
 
   )

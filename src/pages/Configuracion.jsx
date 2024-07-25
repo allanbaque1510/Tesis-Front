@@ -43,6 +43,7 @@ const Configuracion = () => {
                         cantidad_periodos:response.data.data.periodos_desercion,
                         cantidad_total_periodos:response.data.data.total_periodos,
                         cantidad_periodos_gracia:response.data.data.periodos_gracia,
+                        puntuacion:response.data.data.puntuacion,
                     })
                     setConfiguracion(response.data)
                 }else{
@@ -176,9 +177,9 @@ const Configuracion = () => {
                         </Col>
                     <Col  xs={{ flex: '100%'}} sm={{ flex: '100%' }} md={{ flex: '99%' }} lg={{flex: '97%'}}xl={{flex: '95%'}}>
                     <Card>
-                        <Tooltip title={<span>La cantidad de periodos de la tasa de desercion se usa para ver cuantos periodos se recorre apartir del primer semestre de los estudiantes. <br /> Ej: Si la carrera tiene 10 periodos, y la tasa de desercion evalua la mitad de carrera, ingrese el numero 5.</span>}> 
                             <Col  xs={{ flex: '100%'}} sm={{ flex: '100%' }} md={{ flex: '49%' }} lg={{flex: '49%'}}xl={{flex: '49%'}}>
                                     <Card.Grid  style={{width:'100%'}} > 
+                                        <Alert showIcon closable description={<>La cantidad de periodos de la tasa de desercion se usa para ver cuantos periodos se recorre apartir del primer semestre de los estudiantes. <br />  <b>Ejemplo:</b> Si la carrera tiene 10 periodos, y la tasa de desercion evalua hasta la mitad de la carrera, ingrese el numero 5.</>} />
                                         <h3>Tasa de deserción</h3>
                                         <Form.Item
                                             style={{display:'none'}}
@@ -199,9 +200,10 @@ const Configuracion = () => {
                                         </Form.Item>
                                     </Card.Grid>
                             </Col>
-                        </Tooltip>
                             <Col  xs={{ flex: '100%'}} sm={{ flex: '100%' }} md={{ flex: '49%' }} lg={{flex: '49%'}}xl={{flex: '49%'}}>
                                     <Card.Grid style={{width:'100%'}}>
+                                    <Alert showIcon closable description={<>La cantidad total de periodos se refiere a la cantidad de ciclos que tiene la carrera.<br /> Los periodos de gracia hacen referencia a la cantidad maxima de periodos contables despues de que pase los ciclos totales </>}/>
+
                                         <h3>Tasa de titulación</h3> 
                                         <Form.Item
                                                     label="Cantidad total de periodos"
@@ -214,6 +216,20 @@ const Configuracion = () => {
                                         <Form.Item
                                                     label="Cantidad de periodos de gracia"
                                                     name="cantidad_periodos_gracia"
+                                                    >
+                                                    <InputNumber
+                                                        style={{width:'100%'}}
+                                                        />
+                                        </Form.Item>
+                                    </Card.Grid>
+                            </Col>
+                            <Col  xs={{ flex: '100%'}} sm={{ flex: '100%' }} md={{ flex: '49%' }} lg={{flex: '49%'}}xl={{flex: '49%'}}>
+                                    <Card.Grid style={{width:'100%'}}>
+                                        <Alert showIcon closable description={<>La puntuacion total se refiere al puntaje total sobre el que se calificaran los logros. <br /> <b>Ejemplo:</b>Si el puntaje final al sumar todos los logros es de 10, ingrese el numero 10.</>}/>
+                                        <h3>Logros de aprendizaje</h3> 
+                                        <Form.Item
+                                                    label="Puntuacion total"
+                                                    name="puntuacion"
                                                     >
                                                     <InputNumber
                                                         style={{width:'100%'}}

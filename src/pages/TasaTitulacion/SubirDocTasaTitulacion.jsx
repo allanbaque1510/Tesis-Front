@@ -4,32 +4,47 @@ import ExcelService from '../../api/Services/ExcelService';
 import { activarModalResult } from '../../redux/reducer';
 import { useDispatch } from 'react-redux';
 import { loadingOn, loadingOff } from "../../redux/reducer";
-import { Table,Divider,Tabs } from 'antd';
+import { Table,Tooltip,Tabs,Card } from 'antd';
+import {setTwoToneColor,DeleteTwoTone} from '@ant-design/icons';
+
 import moment from 'moment';
 const SubirDocTasaTitulacion = () => {
   const [dataPeriodo, setDataPeriodo] = useState([])
+  setTwoToneColor("#FE7072")
   const dispatch = useDispatch();
   const [archivo, setArchivo] = useState(null);
 
   const columnas = [
     {align:'right',key: 'numero',dataIndex: 'numero',title: '#'},
     {align:'center',key: 'periodo',dataIndex: 'periodo',title: 'Periodo'},
-    {align:'center',key: 'anioInicio',dataIndex: 'anioInicio',title: 'Año Inicial'},
-    {align:'center',key: 'anioFin',dataIndex: 'anioFin',title: 'Año Final'},
-    {align:'center',key: 'ciclo',dataIndex: 'ciclo',title: 'Ciclo'},
-    {align:'center',key: 'fecha_creacion',dataIndex: 'fecha_creacion', title: 'Fecha en que se subio'},
+    {align:'center',key: 'carrera',dataIndex: 'carrera',title: 'Carrera'},
+    {align:'center',key: 'fecha_creacion',dataIndex: 'fecha_creacion', title: 'Fecha creacion'},
+    {align:'center',key: 'accion',dataIndex: 'accion', title: 'Acción'},
   ]
+  const eliminarDatos = (data,carrera) =>{
+    ExcelService.eliminarDatosTasaTitulacion({id:data,id_carrera:carrera})
+    .then(response=>{
+      console.log(response)
+      obtenerPeriodos()
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+  }
+
   const dataTable = dataPeriodo.map((x,index)=>{
     return {
       key:index,
       numero:index+1,
-      periodo:x.codigo,
-      anioInicio:x.anio_inicio,
-      anioFin:x.anio_fin,
-      ciclo:x.ciclo,
-      fecha_creacion:moment(x.created_at).format('DD/MM/YYYY')
+      periodo:x.periodo,
+      carrera:x.carrera,
+      fecha_creacion:moment(x.created_at).format('DD/MM/YYYY'),
+      accion:<Tooltip title={"Borrar todos los datos de este periodo"}><DeleteTwoTone onClick={()=>eliminarDatos(x.id,x.id_carrera)}  style={{fontSize:'25px',cursor:'pointer'}} /></Tooltip>,
     }
   })
+  
+  console.log(dataTable)
+  
   const obtenerPeriodos = ()=>{
   dispatch(loadingOn());
     ExcelService.obtenerHistorialPeriodoTasaTitulacion()
@@ -92,7 +107,7 @@ const SubirDocTasaTitulacion = () => {
     },
     {
       key: '2',
-      label: 'Historial de subida',
+      label: 'Archivos subidos',
       children: <Table
       dataSource={dataTable}
       columns={columnas}
@@ -102,9 +117,10 @@ const SubirDocTasaTitulacion = () => {
   return (
     <div>
       <h2>Documentos del indicador tasa de titulación</h2>
-      <Tabs items={items}/>
+      <Card>
+        <Tabs items={items}/>
+      </Card>      
       
-        <Divider/>
         
         
     </div>

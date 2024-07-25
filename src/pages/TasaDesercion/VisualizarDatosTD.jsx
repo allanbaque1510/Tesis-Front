@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Select,Form,Col,Row,Alert } from 'antd'
+import { Select,Form,Col,Row,Alert,Card,Statistic  } from 'antd'
 import { useDispatch } from 'react-redux';
 import { loadingOn,activarModalResult, loadingOff } from "../../redux/reducer";
-import { Line,Bar,Pie } from '@ant-design/plots';
+import { Line,Bar,Pie,Area} from '@ant-design/plots';
+import { Liquid } from '@ant-design/charts';
+import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 
 import UtilService from '../../api/Services/UtilService'
 const VisualizarDatosTD = () => {
     const [comboPeriodo, setComboPeriodo] = useState([])
     const [comboCarreras, setComboCarreras] = useState([])
-    const [comboTipoGrafico, setComboTipoGrafico] = useState([])
-    const [tipoGrafico, setTipoGrafico] = useState(0)
     const [existeConfigCarrera, setExisteConfigCarrera] = useState(true)
-    
+    const [totalEstudiantes,setTotalEstudiantes]= useState(0)
 
     const [dataEstudiantesPeriodo, setDataEstudiantesPeriodo] = useState([])
   
@@ -33,7 +33,6 @@ const VisualizarDatosTD = () => {
                 }
               }) 
               setComboPeriodo(periodos)
-              setComboTipoGrafico(response?.data?.data?.tipo_grafico)
             }
         }
    })
@@ -76,7 +75,7 @@ const VisualizarDatosTD = () => {
     const dataEnviar = form.getFieldsValue()
     UtilService.obtenerDataPeriodo(dataEnviar)
     .then(response=>{
-      console.log(response.data.data)
+        setTotalEstudiantes(response.data.total)
         const dataEstudiante = response.data.data.sort((a, b) => b.row - a.row);
         setDataEstudiantesPeriodo(dataEstudiante)
     }) 
@@ -99,6 +98,7 @@ const VisualizarDatosTD = () => {
     }
   })
   
+  console.log(dataEstudiantesPeriodo)
   
   const tiposDeGraficos = [
     {
@@ -107,6 +107,9 @@ const VisualizarDatosTD = () => {
               data={data}
               xField= 'codigo'
               yField= 'cantidad_estudiantes'
+              // autoFit={true}
+              width={450}
+              height={350}
               point={{
                 shapeField: 'square',
                 sizeField: 4,}
@@ -127,6 +130,7 @@ const VisualizarDatosTD = () => {
                 data={data}
                 xField= 'codigo'
                 yField= 'cantidad_estudiantes'
+                width={450}
                 paddingRight= {80}
                 style= {{
                   maxWidth: 25,
@@ -158,6 +162,8 @@ const VisualizarDatosTD = () => {
           graphic:<Pie 
                   data={data}
                   colorField= 'codigo'
+                  width={450}
+                  height={350}
                   angleField= 'cantidad_estudiantes'
                   label= {{
                     text: 'codigo',
@@ -176,65 +182,119 @@ const VisualizarDatosTD = () => {
           },
   ]
 
-  const objetoConId3 = tiposDeGraficos.find(item => item.id === tipoGrafico);
+  // const objetoConId3 = tiposDeGraficos.find(item => item.id === tipoGrafico);
   
   return (
     <div>
-        <h1>Indicador Tasa de Desercion</h1>
+        <h2>Indicador Tasa de Desercion</h2>
+        <Row>
+          <Card
+            style={{width:'100%'}}
+          >
         <Form
             form={form}
             layout="vertical"
         >
         {!existeConfigCarrera && <Alert message="No existen datos de configuracion" description="Asigne los datos de configuracion para esta carrera antes de continuar" type="warning" showIcon/>}
-          <Row>
-            <Col>
-              <Form.Item
-                  label="Carrera"
-                  name="carrera"
-                  >
-                  <Select
-                      placeholder="Seleccione una carrera"
-                      options={comboCarreras}
-                      onChange={(value)=>{
-                        obtenerPeriodos(value)
-                        }}
-                        />
-            </Form.Item>
-          </Col>
-                  
-            <Col>
-        <Form.Item
-            label="Periodo"
-            name="periodo"
-            >
-            <Select
-                placeholder="Seleccione un periodo"
-                options={comboPeriodo}
-                onChange={(value)=>{
-                  obtenerDataPeriod(value)
-                  }}
-                  />
-    </Form.Item>
+                  <Row justify={ 'space-around'}>
+                    <Col xs={24} sm={24} md={7} lg={7} xl={8}>
+                      <Form.Item
+                          label="Carrera"
+                          name="carrera"
+                          >
+                          <Select
+                              placeholder="Seleccione una carrera"
+                              options={comboCarreras}
+                              onChange={(value)=>{
+                                obtenerPeriodos(value)
+                                }}
+                                />
+                    </Form.Item>
                   </Col>
-
-                  <Col>
-    <Form.Item
-            label="Tipo Grafico"
-            name="tipo_grafico"
-            >
-            <Select
-                placeholder="Seleccione un tipo de grafica"
-                options={comboTipoGrafico}
-                onChange={(value)=>{
-                  setTipoGrafico(value)
-                  }}
-                  />
-    </Form.Item>
+                  <Col xs={24} sm={24} md={7} lg={7} xl={8}>
+                    <Form.Item
+                        label="Periodo"
+                        name="periodo"
+                        >
+                        <Select
+                            placeholder="Seleccione un periodo"
+                            options={comboPeriodo}
+                            onChange={(value)=>{
+                              obtenerDataPeriod(value)
+                              }}
+                              />
+                    </Form.Item>
                   </Col>
                   </Row>
-
-    {tipoGrafico !== 0 && objetoConId3.graphic}
         </Form>
+        </Card>
+        </Row>
+    {dataEstudiantesPeriodo.length > 0 && 
+      <Card >
+        <Row justify={'space-around'}>
+          {dataEstudiantesPeriodo.map((x,y)=>{
+            return (
+                  <Col key={y} xs={12} sm={12} md={12} lg={10} xl={4} >
+                    <Card  title={x.codigo}  style={{borderRadius: 12, boxShadow: '0 4px 8px rgba(0,0,0,0.1)', margin:'10px', textAlign:'center' }} headStyle={{ fontSize: '1.3em',color:'#BBB', textAlign: 'center' }}>
+                          <Liquid
+                            height={150}
+                            percent={parseFloat(((x.total_estudiantes)/totalEstudiantes ).toFixed(4)) }
+                          />
+                        <Statistic
+                          title={
+                            dataEstudiantesPeriodo[y-1]?
+                            dataEstudiantesPeriodo[y-1].total_estudiantes < x.total_estudiantes ?   
+                            "Matriculados" 
+                            :
+                            "Desertados"
+                            :"-"
+                          }
+                          value={dataEstudiantesPeriodo[y-1]?
+                            dataEstudiantesPeriodo[y-1].total_estudiantes < x.total_estudiantes ?   
+                              x.total_estudiantes - dataEstudiantesPeriodo[y-1].total_estudiantes
+                              :
+                              dataEstudiantesPeriodo[y-1].total_estudiantes - x.total_estudiantes 
+                            :0}
+                          valueStyle={{color:
+                            dataEstudiantesPeriodo[y-1]?
+                            dataEstudiantesPeriodo[y-1].total_estudiantes < x.total_estudiantes ?   
+                            '#3f8600'
+                            :
+                            '#cf1322'
+                            :""
+                          }}
+                          prefix={
+                            dataEstudiantesPeriodo[y-1]?
+                            dataEstudiantesPeriodo[y-1].total_estudiantes < x.total_estudiantes ?   
+                            <ArrowUpOutlined />
+                              :
+                              <ArrowDownOutlined /> 
+                            :""
+                          }
+                          suffix={
+                            dataEstudiantesPeriodo[y-1]?
+                            dataEstudiantesPeriodo[y-1].total_estudiantes < x.total_estudiantes ?   
+                           "+"
+                              :
+                             "-" 
+                            :""
+                          }
+                        />
+                        <Statistic title="Tasa deserción" 
+                        value={parseFloat(((totalEstudiantes - x.total_estudiantes)/totalEstudiantes * 100).toFixed(2))}  suffix="%"/>
+                    </Card>
+                  </Col>
+              )})}
+        </Row>
+        <Row>
+        </Row>
+
+        <Row justify={'space-evenly'} >
+            {tiposDeGraficos[2].graphic}
+            {tiposDeGraficos[0].graphic}
+        </Row>
+      </Card>
+    }
     </div>
   )
 }

@@ -7,6 +7,10 @@ const VisualizarDatosTD= lazy(()=>import('./pages/TasaDesercion/VisualizarDatosT
 const Configuracion=  lazy(()=>import('./pages/Configuracion'))
 const VisualizarDatosTT = lazy(()=>import('./pages/TasaTitulacion/VisualizarDatosTT'))
 const SubirDocTasaTitulacion = lazy(()=>import('./pages/TasaTitulacion/SubirDocTasaTitulacion'))
+const GestionLogros = lazy(()=>import('./pages/LogrosAprendizaje/GestionLogros'))
+const NominaMateriasDoc = lazy(()=>import('./pages/NominaMaterias/SubirDocMaterias'))
+const NominaEstudiantesDoc = lazy(()=>import('./pages/NominaEstudiantesPeriodo/SubirDocEstudiantes'))
+const SubirPuntuacion = lazy(()=>import('./pages/LogrosAprendizaje/PuntuacionLogros/CargaMasivaPuntuacion'))
 export const directorioLogin = () => {
   return[ 
     {
@@ -49,7 +53,28 @@ export const directorioRutasProtegidas=()=>{
       path:'configuracion',
       key:"configuracion",
       element:Configuracion
+    },
+    {
+      path:'logros_aprendizaje/gestion_logros',
+      key:'logros_aprendizaje/gestion_logros',
+      element:GestionLogros
+    },
+    {
+      path:"nomina_materias/subir_documento",
+      key:"nomina_materias/subir_documento",
+      element:NominaMateriasDoc
+    },
+    {
+      path:"logros_aprendizaje/puntuacion",
+      key:"logros_aprendizaje/puntuacion",
+      element:SubirPuntuacion
+    },
+    {
+      path:'nomina_estudiante/subir_documento',
+      key:"nomina_estudiante/subir_documento",
+      element:NominaEstudiantesDoc
     }
+    
   ];
 }
 
