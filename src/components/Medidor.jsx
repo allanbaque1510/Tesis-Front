@@ -3,8 +3,8 @@ import { Gauge } from '@ant-design/plots';
 
 const Medidor = (props) => {
     const config = {
-        width: 250,
-        height: 250,
+        width: 400,
+        height: 400,
         data:{
           target: props.target,
           total: props.total,
@@ -14,9 +14,7 @@ const Medidor = (props) => {
         },
       };
 
-  return (
-    <div><Gauge  {...config} /></div>
-  )
+  return (<Gauge {...config} />)
 }
 
 export default Medidor

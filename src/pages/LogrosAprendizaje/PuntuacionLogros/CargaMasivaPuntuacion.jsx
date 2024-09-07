@@ -24,10 +24,6 @@ const CargaMasivaPuntuacion = () => {
     const [archivo, setArchivo] = useState({}) 
     const [statusModalAsignacionPuntos, setStatusModalAsignacionPuntos] = useState(false) 
     
-    // const [buscandoMaterias, setBuscandoMaterias] = useState(false)
-    
-    // const indeterminate = checkListValue.length > 0 && checkListValue.length < comboMaterias.length;
-    // const checkAll = comboMaterias.length === checkListValue.length;
 
     useEffect(() => {
         form.setFieldsValue({materias:checkListValue})
@@ -44,7 +40,6 @@ const CargaMasivaPuntuacion = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
                 title:"Error al asignar los logros",
@@ -53,9 +48,10 @@ const CargaMasivaPuntuacion = () => {
         })
         .finally(()=>dispatch(loadingOff()))
     }
+
     const obtenerDocentes = () =>{
+        form.resetFields(['docente','grupo']);
         const data = form.getFieldsValue();
-        form.resetFields(['docente']);
         UtilService.obtenerDocentesPeriodoCarrera(data)
         .then(response=>{
             if(response.data.ok){
@@ -63,40 +59,35 @@ const CargaMasivaPuntuacion = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner los docentes",
+                title:"Error al obtener los docentes",
                 message:error.response.data.error,
             }))
         })
     }
+
     const obtenerPeriodos = (data) =>{
-        UtilService.obtenerPeriodoNominaCarreraDocenteMateria(data)
+        form.resetFields(['docente','grupo','materia','periodos']);
+
+        UtilService.obtenerPeriodoNominaCarreraDocenteMateriaConEstudiantes(data)
         .then(response=>{
             if(response.data.ok){
                 setPeriodos(response.data.data)
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner los periodos",
+                title:"Error al obtener los periodos",
                 message:error.response.data.error,
             }))
         })
     }
- 
-    // const onChangeCheckList = (e) =>{
-    //     setCheckListValue(e)
-    // }
-    // const onCheckAllChange = (e) => {
-    //     setCheckListValue(e.target.checked ? comboMaterias.map((x) => x.value) : [])
-    // };
 
     const obtenerMaterias = () =>{
-        // setBuscandoMaterias(true)
+        form.resetFields(['docente','grupo','materia']);
+
         const datos = form.getFieldsValue()
 
         UtilService.obtenerMaterias(datos)
@@ -106,10 +97,9 @@ const CargaMasivaPuntuacion = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner las materias",
+                title:"Error al obtener las materias",
                 message:error.response.data.error,
             }))
         })
@@ -118,16 +108,16 @@ const CargaMasivaPuntuacion = () => {
         })
     }
     const obtenerGrupos = () =>{
+        form.resetFields(["grupo"]);
         const datos = form.getFieldsValue();
         UtilService.obtenerGruposDocenteMateria(datos)
         .then(response=>{
             setComboGrupos(response.data.data)
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner los grupos",
+                title:"Error al obtener los grupos",
                 message:error.response.data.error,
             }))
         })
@@ -175,7 +165,6 @@ const CargaMasivaPuntuacion = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
                 title:"Error al asignar puntuacion a los logros",
@@ -184,12 +173,19 @@ const CargaMasivaPuntuacion = () => {
         })
         .finally(()=>dispatch(loadingOff()))
       }
-
+      const obtenerLabels = () =>{
+        const datos = form.getFieldsValue()
+        const docente = datos.docente&&comboDocente.filter(x=>x.value === datos.docente)[0].label;
+        const materia = datos.materia&&comboMaterias.filter(x=>x.value === datos.materia)[0].label;
+        const periodo = datos.periodos&&periodos.filter(x=>x.value === datos.periodos)[0].label;
+        const data ={docente,materia,periodo};
+        return data;
+      }
       
 
   return (
       <div>
-        <ModalAsignacionPuntos status={statusModalAsignacionPuntos} datos={form.getFieldsValue()} close={()=>setStatusModalAsignacionPuntos(false)} />
+        <ModalAsignacionPuntos status={statusModalAsignacionPuntos} datos={form.getFieldsValue()} datosLabel ={obtenerLabels()} close={()=>setStatusModalAsignacionPuntos(false)} />
         <h2>Puntuacion de los logros de aprendizaje</h2>
         <Card>
             <Alert style={{marginBlock:'10px'}} message="Aqui se descargara el formato de los estudiantes inscritos por materia y docentes(Opcional)" showIcon type='info'/>

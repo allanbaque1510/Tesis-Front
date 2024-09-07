@@ -8,7 +8,7 @@ import { Table,Tooltip,Tabs,Card } from 'antd';
 import {setTwoToneColor,DeleteTwoTone} from '@ant-design/icons';
 
 import moment from 'moment';
-const SubirDocTasaTitulacion = () => {
+const SubirDocTasaReprobados = () => {
   const [dataPeriodo, setDataPeriodo] = useState([])
   setTwoToneColor("#FE7072")
   const dispatch = useDispatch();
@@ -21,34 +21,38 @@ const SubirDocTasaTitulacion = () => {
     {align:'center',key: 'fecha_creacion',dataIndex: 'fecha_creacion', title: 'Fecha creacion'},
     {align:'center',key: 'accion',dataIndex: 'accion', title: 'Acción'},
   ]
-  const eliminarDatos = (data,carrera) =>{
-    ExcelService.eliminarDatosTasaTitulacion({id:data,id_carrera:carrera})
+  const eliminarDatos = (id) =>{
+    ExcelService.eliminarDatosArchivo({id})
     .then(response=>{
       obtenerPeriodos()
     })
     .catch(error=>{
-      console.log(error)
+      dispatch(activarModalResult({
+        success:false,
+        title:"Error al eliminar los datos",
+        message:error.response.data.error,
+      }))
     })
   }
 
-  const dataTable = dataPeriodo.map((x,index)=>{
+  const dataTable = dataPeriodo?.map((x,index)=>{
     return {
       key:index,
       numero:index+1,
       periodo:x.periodo,
       carrera:x.carrera,
       fecha_creacion:moment(x.created_at).format('DD/MM/YYYY'),
-      accion:<Tooltip title={"Borrar todos los datos de este periodo"}><DeleteTwoTone onClick={()=>eliminarDatos(x.id,x.id_carrera)}  style={{fontSize:'25px',cursor:'pointer'}} /></Tooltip>,
+      accion:<Tooltip title={"Borrar todos los datos de este periodo"}><DeleteTwoTone onClick={()=>eliminarDatos(x.id)}  style={{fontSize:'25px',cursor:'pointer'}} /></Tooltip>,
     }
   })
   
   
   const obtenerPeriodos = ()=>{
   dispatch(loadingOn());
-    ExcelService.obtenerHistorialPeriodoTasaTitulacion()
+    ExcelService.historialReporteReprobados()
     .then(response=>{
       if(response.data.ok){
-        setDataPeriodo(response.data.periodos)
+        setDataPeriodo(response.data.data)
       }
     })
     .catch(error=>{
@@ -71,7 +75,7 @@ const SubirDocTasaTitulacion = () => {
 
   const registrarDatosExcel = async () =>{
     dispatch(loadingOn());
-      await ExcelService.registrarDatosExcelPeriodoTitulacion({"file":archivo})
+      await ExcelService.registrarDatosExcelReprobados({"file":archivo})
       .then((response)=>{
         if(response.data.ok){
           dispatch(activarModalResult({
@@ -113,7 +117,7 @@ const SubirDocTasaTitulacion = () => {
   ]
   return (
     <div>
-      <h2>Documentos del indicador tasa de titulación</h2>
+      <h2>Documentos del indicador tasa de reprobados</h2>
       <Card>
         <Tabs items={items}/>
       </Card>      
@@ -124,4 +128,4 @@ const SubirDocTasaTitulacion = () => {
   )
 }
 
-export default SubirDocTasaTitulacion
+export default SubirDocTasaReprobados

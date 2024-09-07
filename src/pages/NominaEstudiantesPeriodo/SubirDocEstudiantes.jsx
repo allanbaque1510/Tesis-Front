@@ -20,14 +20,13 @@ const SubirDocEstudiantes = () => {
       ]
     const obtenerHistorial = () =>{
         dispatch(loadingOn())
-        ExcelService.historialReporteNominaCarreraDocenteMateria()
+        ExcelService.historialReporteNominaGrupoEstudiantes()
         .then(response=>{
             if(response.data.ok){
                 setDataTable(response.data.data)
             }
         })
         .catch(error=>{
-            console.log(error.response.data)
             dispatch(activarModalResult({
               success:false,
               title:"Error al obtener el historial",
@@ -51,7 +50,6 @@ const SubirDocEstudiantes = () => {
               }))
         })
         .catch(error=>{
-          console.log(error)
           dispatch(activarModalResult({
             success:false,
             title:"Error al cargar datos del excel",

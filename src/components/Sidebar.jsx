@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from "react-router-dom";
 import { Tooltip  } from 'antd'
 
-import {BarChartOutlined,ReconciliationOutlined,ProductOutlined,SettingOutlined,ReadOutlined,RocketOutlined, UploadOutlined,FallOutlined,BookOutlined} from '@ant-design/icons';
+import {BarChartOutlined,ReconciliationOutlined,ProductOutlined,SettingOutlined,ReadOutlined,RocketOutlined, UploadOutlined,FallOutlined,BookOutlined,FrownOutlined} from '@ant-design/icons';
 import { Menu } from 'antd';
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -22,10 +22,18 @@ const Sidebar = () => {
      ]
    },
    {
+     label:<Tooltip title="Tasa de reprobados"  placement="left">Tasa de reprobados</Tooltip>,icon:<Tooltip title="Tasa de titulación"><FrownOutlined /></Tooltip>, key: '7', children: [
+      { icon:<Tooltip title="Tasa de reprobados - Subir Documento"><UploadOutlined /></Tooltip> , link: '/tasa_reprobados/subir_documento', label: 'Documentos', key: '7.1' },
+      { icon:<Tooltip title="Tasa de reprobados - Datos e información"><BarChartOutlined /></Tooltip>, link: '/tasa_reprobados/datos', label: 'Datos', key: '7.2' },
+      { icon:<Tooltip title="Tasa de reprobados - Porcentajes"><BarChartOutlined /></Tooltip>, link: '/tasa_reprobados/datos_porcentaje', label: 'Porcentajes', key: '7.3' },
+      
+    ]
+  },
+   {
     label:<Tooltip title="Logros de aprendizaje"  placement="left">Logros de aprendizaje</Tooltip>, icon:<Tooltip title="Logros de aprendizaje"><RocketOutlined /></Tooltip>,key: '4', children: [
      { icon:<Tooltip title="Logros de aprendizaje - Gestionar Logros"><ReconciliationOutlined /></Tooltip>, link: '/logros_aprendizaje/gestion_logros', label: 'Gestionar logros', key: '4.1' },
-     { icon:<Tooltip title="Logros de aprendizaje - Puntuación"><BarChartOutlined /></Tooltip>, link: '/logros_aprendizaje/puntuacion', label: 'Puntuación', key: '4.2' },
-    //  { icon:<Tooltip title="Logros de aprendizaje - Datos e informacion"><BarChartOutlined /></Tooltip>, link: '/tasa_titulacion/datos', label: 'Datos', key: '4.2' },
+     { icon:<Tooltip title="Logros de aprendizaje - Asignar Puntuación"><BarChartOutlined /></Tooltip>, link: '/logros_aprendizaje/puntuacion', label: 'Asignar Puntuación', key: '4.2' },
+     { icon:<Tooltip title="Logros de aprendizaje - Datos e informacion"><BarChartOutlined /></Tooltip>, link: '/logros_aprendizaje/datos', label: 'Datos', key: '4.3' },
     ]
    },
    {

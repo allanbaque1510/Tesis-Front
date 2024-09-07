@@ -1,23 +1,48 @@
-import React, { useEffect, useState } from 'react'
-import { Select,Form,Col,Row,Alert,Card,Statistic  } from 'antd'
+import React, { useEffect, useState,useRef  } from 'react'
+import { Select,Form,Col,Row,Alert,Card,Statistic,Empty, Button  } from 'antd'
 import { useDispatch } from 'react-redux';
 import { loadingOn,activarModalResult, loadingOff } from "../../redux/reducer";
 import { Line,Bar,Pie,Area} from '@ant-design/plots';
 import { Liquid } from '@ant-design/charts';
-import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-
+import { ArrowDownOutlined, ArrowUpOutlined,FilePdfOutlined } from '@ant-design/icons';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import UtilService from '../../api/Services/UtilService'
+
 const VisualizarDatosTD = () => {
     const [comboPeriodo, setComboPeriodo] = useState([])
     const [comboCarreras, setComboCarreras] = useState([])
     const [existeConfigCarrera, setExisteConfigCarrera] = useState(true)
     const [totalEstudiantes,setTotalEstudiantes]= useState(0)
-
+    const [dataTituloPresentar, setDataTituloPresentar] = useState({})
     const [dataEstudiantesPeriodo, setDataEstudiantesPeriodo] = useState([])
   
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
+  const imageRefs = useRef([]);
+  const addToRefs = (el) => {
+    imageRefs.current.push(el);
+  };
+  const handlePrint =()=>{
+      const pdf = new jsPDF();
+      let promises = [];
+      imageRefs.current.forEach((imgRef, index) => {
+        promises.push(
+          html2canvas(imgRef).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = pdf.internal.pageSize.getWidth();
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            if (index > 0) pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+          })
+        );
+      });
+      Promise.all(promises).then(() => {
+        pdf.save('download.pdf');
+      });
+    };
+    
   const obtenerPeriodos = (id_carrera)=>{
    UtilService.obtenerComboPeriodo({id_carrera})
    .then(response=>{
@@ -37,29 +62,6 @@ const VisualizarDatosTD = () => {
         }
    })
   }
-  const registrarDatosExcel = async () =>{
-  dispatch(loadingOn());
-    await ExcelService.registrarDatosExcel({"file":archivo})
-    .then((response)=>{
-      if(response.data.ok){
-        dispatch(activarModalResult({
-          success:true,
-          title:response.data.message,
-          message:"",
-        }))
-        props.despuesCargar()
-      }
-    })
-    .catch(error=>{
-      dispatch(activarModalResult({
-        success:false,
-        title:"Error al cargar datos del excel",
-        message:error.response.data.message,
-      }))
-    })
-    .finally(()=>{dispatch(loadingOff());
-    })
-  }
 
   const getComboCarreras = () =>{
     UtilService.getComboCarreras()
@@ -72,7 +74,12 @@ const VisualizarDatosTD = () => {
 
   const obtenerDataPeriod=(data)=>{
     dispatch(loadingOn());
+
     const dataEnviar = form.getFieldsValue()
+    const carrera = comboCarreras.filter(x=>x.value === dataEnviar.carrera)[0]
+    const periodo = comboPeriodo.filter(x=>x.value === dataEnviar.periodo)[0]
+
+    setDataTituloPresentar({carrera,periodo})
     UtilService.obtenerDataPeriodo(dataEnviar)
     .then(response=>{
         setTotalEstudiantes(response.data.total)
@@ -98,7 +105,6 @@ const VisualizarDatosTD = () => {
     }
   })
   
-  console.log(dataEstudiantesPeriodo)
   
   const tiposDeGraficos = [
     {
@@ -138,7 +144,6 @@ const VisualizarDatosTD = () => {
                 markBackground= {{
                   label: {
                     text: ({ originData }) => {
-                      console.log(originData)
                       return `${((originData?.cantidad_estudiantes/data[0]?.cantidad_estudiantes) * 100).toFixed(2)}% | ${originData?.cantidad_estudiantes}`;
                     },
                     position: 'right',
@@ -182,8 +187,6 @@ const VisualizarDatosTD = () => {
           },
   ]
 
-  // const objetoConId3 = tiposDeGraficos.find(item => item.id === tipoGrafico);
-  
   return (
     <div>
         <h2>Indicador Tasa de Desercion</h2>
@@ -227,14 +230,19 @@ const VisualizarDatosTD = () => {
                   </Col>
                   </Row>
         </Form>
+        {dataEstudiantesPeriodo.length > 0 &&
+          <Row justify={'end'}>
+            <Button disabled={!dataEstudiantesPeriodo.length > 0} icon={<FilePdfOutlined />} className='botonPdf' onClick={handlePrint} type='primary'>Descargar PDF</Button>
+          </Row>
+        }
         </Card>
         </Row>
-    {dataEstudiantesPeriodo.length > 0 && 
-      <Card >
-        <Row justify={'space-around'}>
+    {dataEstudiantesPeriodo.length > 0 ?
+      <Card  ref={addToRefs} title={<>{dataTituloPresentar.carrera.label} <span style={{marginInline:'15px'}}></span> {dataTituloPresentar.periodo.label}</>}>
+        <Row  justify={'space-around'}  >
           {dataEstudiantesPeriodo.map((x,y)=>{
             return (
-                  <Col key={y} xs={12} sm={12} md={12} lg={10} xl={4} >
+                  <Col  key={y} xs={12} sm={12} md={12} lg={10} xl={4} >
                     <Card  title={x.codigo}  style={{borderRadius: 12, boxShadow: '0 4px 8px rgba(0,0,0,0.1)', margin:'10px', textAlign:'center' }} headStyle={{ fontSize: '1.3em',color:'#BBB', textAlign: 'center' }}>
                           <Liquid
                             height={150}
@@ -286,13 +294,15 @@ const VisualizarDatosTD = () => {
                   </Col>
               )})}
         </Row>
-        <Row>
-        </Row>
 
         <Row justify={'space-evenly'} >
             {tiposDeGraficos[2].graphic}
             {tiposDeGraficos[0].graphic}
         </Row>
+      </Card>
+      :
+      <Card style={{justifyContent:'center', display:'flex',height:'60vh', alignItems:'center'}}>
+        <Empty/>
       </Card>
     }
     </div>

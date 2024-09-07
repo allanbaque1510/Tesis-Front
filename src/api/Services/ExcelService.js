@@ -33,7 +33,39 @@ const descargarFormatoPuntuacion = (data) => {
 const registrarDatosExcelNominaEstudiantesPeriodo = (data) => {
   return axios.post("/registrarDatosExcelNominaEstudiantesPeriodo", data);
 };
+const historialReporteNominaGrupoEstudiantes = (data) => {
+  return axios.post("/historialReporteNominaGrupoEstudiantes", data);
+};
+
+const historialReporteReprobados = (data) => {
+  return axios.post("/historialReporteReprobados", data);
+};
+
+const registrarDatosExcelReprobados = (data) => {
+  return axios.post("/registrarDatosExcelReprobados", data);
+};
+const eliminarDatosArchivo = (data) => {
+  return axios.post("/eliminarDatosArchivo", data);
+};
+
+const descargarExcelTasaTitulacion = (data) => {
+  return axios.post("/descargarExcelTasaTitulacion", data, {
+    responseType: "blob",
+  });
+};
+const descargarExcelTasaReprobados = (data) => {
+  return axios.post("/descargarExcelTasaReprobados", data, {
+    responseType: "blob",
+  });
+};
+
 const ExcelService = {
+  descargarExcelTasaReprobados,
+  descargarExcelTasaTitulacion,
+  eliminarDatosArchivo,
+  registrarDatosExcelReprobados,
+  historialReporteReprobados,
+  historialReporteNominaGrupoEstudiantes,
   registrarDatosExcelNominaEstudiantesPeriodo,
   registrarDatosExcel,
   descargarFormatoPuntuacion,

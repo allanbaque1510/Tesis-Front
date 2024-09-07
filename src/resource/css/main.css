@@ -2,3 +2,28 @@ body{
     margin: 0;
     padding: 0;
 }
+.no-break {
+    page-break-inside: avoid;
+}
+.botonPdf{
+    background-color:white; 
+    margin-inline: 5px;
+    color:#D53A3A;
+    border:1px solid #D53A3A; 
+}
+.botonPdf:hover{
+    color:white !important; 
+    background-color:#D53A3A !important;
+}
+
+
+.botonExcel{
+    background-color:white; 
+    color:#389755;
+    border:1px solid #297941; 
+    margin-inline: 5px;
+}
+.botonExcel:hover{
+    color:white !important;  
+    background-color:#389755 !important;
+}

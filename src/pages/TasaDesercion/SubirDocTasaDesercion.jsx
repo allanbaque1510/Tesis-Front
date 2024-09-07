@@ -22,7 +22,6 @@ const SubirDocTasaDesercion = () => {
   const eliminarDatos = (data,id_carrera) =>{
     ExcelService.eliminarDatosTasaDesercion({id:data,id_carrera})
     .then(response=>{
-      console.log(response)
       obtenerPeriodos()
     })
     .catch(error=>{

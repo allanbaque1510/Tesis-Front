@@ -41,7 +41,6 @@ const AsignarLogrosAprendizajeMasivo = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
                 title:"Error al asignar los logros",
@@ -64,10 +63,9 @@ const AsignarLogrosAprendizajeMasivo = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner las materias",
+                title:"Error al obtener las materias",
                 message:error.response.data.error,
             }))
         })
@@ -82,10 +80,9 @@ const AsignarLogrosAprendizajeMasivo = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner los periodos",
+                title:"Error al obtener los periodos",
                 message:error.response.data.error,
             }))
         })
@@ -95,8 +92,6 @@ const AsignarLogrosAprendizajeMasivo = () => {
         setBuscandoLogros(true)
         UtilService.obtenerLogrosAprendizaje()
         .then(response=>{
-            console.log(response)
-            // setComboLogros(response.data.data.map((x,y)=>({value:x.id_logros , label:x.descripcion})))
             setComboLogros(response.data.data.map((x,y)=>({value:x.id_logros , label:<><Tag color='green'>{x.codigo}</Tag>{x.descripcion}</>})))
 
         })

@@ -33,11 +33,9 @@ const Configuracion = () => {
         dispatch(loadingOn());
         UtilService.getConfiguracion(e)
         .then(response=>{
-            console.log(response.data)
             if(response.data.ok){
                 if(response.data.data !== null){
                     setMessageConfig("")
-                    console.log()
                     form.setFieldsValue({
                         id_configuracion:response.data.data.id_configuracion,
                         cantidad_periodos:response.data.data.periodos_desercion,
@@ -116,7 +114,10 @@ const Configuracion = () => {
         const datos = form.getFieldsValue()
         UtilService.saveConfiguration(datos)
         .then(response=>{
-            console.log(response.data)
+            dispatch(activarModalResult({
+                success:true,
+                title:"Configuración guardada exitosamente",
+              }))
         })
         .catch(error=>{
             dispatch(activarModalResult({

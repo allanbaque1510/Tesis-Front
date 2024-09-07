@@ -10,7 +10,6 @@ const ModalAsignacionPuntos = (props) => {
     const dispatch = useDispatch();
     const [logrosAprendizaje, setLogrosAprendizaje] = useState([])
     const [configuracion, setConfiguracion] = useState([])
-
     const [parametrizacion, setParametrizacion] = useState({contador:null,sumatoria:null})
     const [form] = Form.useForm()
     useEffect(() => {
@@ -18,7 +17,6 @@ const ModalAsignacionPuntos = (props) => {
             obtenerLogrosAprendizaje()
         }
     }, [props.status])
-    
     const obtenerLogrosAprendizaje = ()=>{
         dispatch(loadingOn())
         UtilService.obtenerLogrosAprendizajeDocente(props.datos)
@@ -27,10 +25,9 @@ const ModalAsignacionPuntos = (props) => {
             setConfiguracion(response.data.configuracion)
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner los periodos",
+                title:"Error al obtener los periodos",
                 message:error.response.data.error,
             }))
         })
@@ -44,24 +41,23 @@ const ModalAsignacionPuntos = (props) => {
     const onValuesChange = (changedValues, allValues) => {
         setParametrizacion({contador:allValues?.puntuacion?.length, sumatoria:allValues?.puntuacion?.filter(x=>x?.puntuacion !== undefined).reduce((sum,item)=>sum + item.puntuacion,0)})
     };
-    
-const enviarDatos = (datos) =>{
+    const enviarDatos = (datos) =>{
+        dispatch(loadingOn())
     ExcelService.descargarFormatoPuntuacion({...datos, datos:props.datos})
     .then(async(response)=>{
         const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `CARGA MASIVA ${periodo[0].label}.xlsx`;
+        a.download = `LOGROS_APRENDIZAJE_${props.datosLabel.periodo}_${props.datosLabel.materia}_${props.datosLabel.docente}.xlsx`;
         document.body.appendChild(a);
         a.click();
         a.remove();
     })
     .catch(error=>{
-        console.log(error)
         dispatch(activarModalResult({
             success:false,
-            title:"Error al obtetner los periodos",
+            title:"Error al obtener los periodos",
             message:error.response.data.error,
         }))
     })
@@ -134,7 +130,7 @@ const  agregarIndice = () =>{
                     name={[name, 'puntuacion']}
                     // rules={[{required: true,message: 'Requerido',},]}
                 >
-                    <InputNumber style={{width:'100%'}} placeholder="Last Name" />
+                    <InputNumber style={{width:'100%'}} placeholder="Ingrese un puntaje" />
                 </Form.Item>
                 </td>
                 <td style={{width:'40px', height:'30px' ,display:'flex', justifyContent:'center', alignContent:'center'}}>
@@ -150,7 +146,7 @@ const  agregarIndice = () =>{
         
           >
             <Button type="dashed" onClick={() =>{add(); agregarIndice()}} block icon={<PlusOutlined />}>
-              Add field
+              Agregar campo
             </Button>
           </Form.Item>
         </>
@@ -158,16 +154,12 @@ const  agregarIndice = () =>{
     </Form.List>
     <Row justify={'end'}>
 
-    <Form.Item>
-      <Button type="primary" htmlType="submit">
-        Submit
+      <Button type="primary" disabled={configuracion.puntuacion !== parametrizacion.sumatoria} style={{marginInline:'10px'}} htmlType="submit">
+        Descargar formato
       </Button>
-    </Form.Item>
-    <Form.Item>
         <Button onClick={cerrarModal}>
             Cerrar
         </Button>
-    </Form.Item>
     </Row>
         </Form>
     </Modal>

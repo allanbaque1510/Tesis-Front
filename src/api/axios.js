@@ -2,7 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const instancia = axios.create({
-  baseURL: "https://tesis.siglotecnologico.com/api",
+  baseURL: "http://localhost:8000/api",
+  // baseURL: "https://tesis.siglotecnologico.com/api",
   withCredentials: true,
 });
 

@@ -34,7 +34,6 @@ const AsignarLogrosMateria = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
                 title:"Error al asignar los logros",
@@ -61,10 +60,9 @@ const AsignarLogrosMateria = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner las materias",
+                title:"Error al obtener las materias",
                 message:error.response.data.error,
             }))
         })
@@ -79,10 +77,9 @@ const AsignarLogrosMateria = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
-                title:"Error al obtetner los periodos",
+                title:"Error al obtener los periodos",
                 message:error.response.data.error,
             }))
         })

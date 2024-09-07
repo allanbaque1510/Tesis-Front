@@ -44,7 +44,6 @@ const GestionLogros = () => {
                 }
             }) 
             .catch(error=>{
-                console.log(error)
                 dispatch(activarModalResult({
                     success:false,
                     title:"Error al agregar logro de aprendizaje",

@@ -23,12 +23,10 @@ const SubirDocMaterias = () => {
         ExcelService.historialReporteNominaCarreraDocenteMateria()
         .then(response=>{
             if(response.data.ok){
-                console.log(response.data.data)
                 setDataTable(response.data.data)
             }
         })
         .catch(error=>{
-            console.log(error.response.data)
             dispatch(activarModalResult({
               success:false,
               title:"Error al obtener el historial",
@@ -52,7 +50,6 @@ const SubirDocMaterias = () => {
               }))
         })
         .catch(error=>{
-          console.log(error.response.data)
           dispatch(activarModalResult({
             success:false,
             title:"Error al cargar datos del excel",

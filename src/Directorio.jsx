@@ -11,6 +11,13 @@ const GestionLogros = lazy(()=>import('./pages/LogrosAprendizaje/GestionLogros')
 const NominaMateriasDoc = lazy(()=>import('./pages/NominaMaterias/SubirDocMaterias'))
 const NominaEstudiantesDoc = lazy(()=>import('./pages/NominaEstudiantesPeriodo/SubirDocEstudiantes'))
 const SubirPuntuacion = lazy(()=>import('./pages/LogrosAprendizaje/PuntuacionLogros/CargaMasivaPuntuacion'))
+const VisualizarDatosTR= lazy(()=>import('./pages/TasaReprobados/VisualizarDatosTR'))
+
+const VisualizarDatosPorcentajeTR= lazy(()=>import('./pages/TasaReprobados/VisualizarDatosPorcentajeTR'))
+
+const VisualizarDatosLA= lazy(()=>import('./pages/LogrosAprendizaje/VisualizarDatosLA'))
+const SubirDocTasaReprobados = lazy(()=>import('./pages/TasaReprobados/SubirDocTasaReprobados'))
+
 export const directorioLogin = () => {
   return[ 
     {
@@ -73,6 +80,26 @@ export const directorioRutasProtegidas=()=>{
       path:'nomina_estudiante/subir_documento',
       key:"nomina_estudiante/subir_documento",
       element:NominaEstudiantesDoc
+    },
+    {
+      path:'tasa_reprobados/subir_documento',
+      key:"tasa_reprobados/subir_documento",
+      element:SubirDocTasaReprobados
+    },
+    {
+      path:'tasa_reprobados/datos',
+      key:'tasa_reprobados/datos',
+      element:VisualizarDatosTR
+    },
+    {
+      path:'tasa_reprobados/datos_porcentaje',
+      key:'tasa_reprobados/datos_porcentaje',
+      element:VisualizarDatosPorcentajeTR
+    },  
+    {
+      path:'logros_aprendizaje/datos',
+      key:'logros_aprendizaje/datos',
+      element:VisualizarDatosLA
     }
     
   ];

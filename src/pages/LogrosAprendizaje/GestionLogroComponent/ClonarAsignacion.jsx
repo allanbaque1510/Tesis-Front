@@ -33,7 +33,6 @@ const ClonarAsignacion = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
                 title:"Error al asignar los logros",
@@ -51,7 +50,6 @@ const ClonarAsignacion = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
                 title:"Error al obtener los periodos",
@@ -70,7 +68,6 @@ const ClonarAsignacion = () => {
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
                 title:"Error al obtener las materias",
@@ -85,12 +82,10 @@ const ClonarAsignacion = () => {
         UtilService.obtenerLogrosPeriodo({periodos:datos.periodo_referencio,carrera:datos.carrera})
         .then(response=>{
             if(response.data.ok){
-                console.log(response.data.data)
                 setLogrosPeriodoCarrera(response.data.data)
             }
         })
         .catch(error=>{
-            console.log(error)
             dispatch(activarModalResult({
                 success:false,
                 title:"Error al obtener los logros por periodo y carrera",
@@ -131,7 +126,6 @@ const ClonarAsignacion = () => {
                 setComboMaterias([])
 
             }
-            console.log(response)
         })
         .catch(error=>{
             dispatch(activarModalResult({

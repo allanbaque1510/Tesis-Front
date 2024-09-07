@@ -48,6 +48,14 @@ const obtenerPeriodoNominaCarreraDocenteMateria = (id_carrera) => {
   return axios.get(`/obtenerPeriodoNominaCarreraDocenteMateria/${id_carrera}`);
 };
 
+const obtenerPeriodoNominaCarreraDocenteMateriaConEstudiantes = (
+  id_carrera
+) => {
+  return axios.get(
+    `/obtenerPeriodoNominaCarreraDocenteMateriaConEstudiantes/${id_carrera}`
+  );
+};
+
 const asignarLogrosAprendizajeMasivo = (data) => {
   return axios.post("/asignarLogrosAprendizajeMasivo", data);
 };
@@ -86,7 +94,53 @@ const obtenerGruposDocenteMateria = (data) => {
   return axios.post("/obtenerGruposDocenteMateria", data);
 };
 
+const obtenerReprobadosMateria = (data) => {
+  return axios.post("/obtenerReprobadosMateria", data);
+};
+
+const obtenerComboPeriodoReprobados = (data) => {
+  return axios.post("/obtenerComboPeriodoReprobados", data);
+};
+
+const obtenerReprobadoMateriaDetalle = (data) => {
+  return axios.post("/obtenerReprobadoMateriaDetalle", data);
+};
+
+const obtenerComboPeriodoLogrosAprendizaje = (data) => {
+  return axios.post("/obtenerComboPeriodoLogrosAprendizaje", data);
+};
+
+const obtenerComboMateriasLogrosAprendizaje = (data) => {
+  return axios.post("/obtenerComboMateriasLogrosAprendizaje", data);
+};
+
+const getLogrosPorMateria = (data) => {
+  return axios.post("/getLogrosPorMateria", data);
+};
+
+const obtenerReprobadosMateriaPorcentaje = (data) => {
+  return axios.post("/obtenerReprobadosMateriaPorcentaje", data);
+};
+
+const obtenerReprobadoMateriaDetallePorcentaje = (data) => {
+  return axios.post("/obtenerReprobadoMateriaDetallePorcentaje", data);
+};
+
+const obtenerDashboardLogros = (data) => {
+  return axios.post("/obtenerDashboardLogros", data);
+};
+
 const UtilService = {
+  obtenerDashboardLogros,
+  obtenerPeriodoNominaCarreraDocenteMateriaConEstudiantes,
+  obtenerReprobadoMateriaDetallePorcentaje,
+  getLogrosPorMateria,
+  obtenerReprobadosMateriaPorcentaje,
+  obtenerComboMateriasLogrosAprendizaje,
+  obtenerComboPeriodoReprobados,
+  obtenerComboPeriodoLogrosAprendizaje,
+  obtenerReprobadoMateriaDetalle,
+  obtenerReprobadosMateria,
   obtenerGruposDocenteMateria,
   obtenerDocenteMateria,
   obtenerLogrosAprendizajeDocente,

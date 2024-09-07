@@ -29,7 +29,6 @@ const ModalAgregarLogro = (props) => {
         }
     })
     .catch(error=>{
-        console.log(error)
         dispatch(activarModalResult({
             success:false,
             title:"Error al agregar logro de aprendizaje",
@@ -50,10 +49,9 @@ const obtenerMaterias = () =>{
         }
     })
     .catch(error=>{
-        console.log(error)
         dispatch(activarModalResult({
             success:false,
-            title:"Error al obtetner las materias",
+            title:"Error al obtener las materias",
             message:error.response.data.error,
         }))
     })
@@ -66,7 +64,6 @@ const onCheckAllChange = (e) => {
     setCheckListValue(e.target.checked ? comboMaterias.map((x) => x.value) : [])
 };
 
-console.log(checkListValue)
 useEffect(() => {
     form.setFieldsValue({materias:checkListValue})
 }, 
@@ -80,7 +77,6 @@ const obtenerComboCarreras= () =>{
         }
     })
     .catch(error=>{
-        console.log(error)
         dispatch(activarModalResult({
             success:false,
             title:"Error al asignar los logros",
@@ -100,10 +96,9 @@ const obtenerPeriodos = (data) =>{
         }
     })
     .catch(error=>{
-        console.log(error)
         dispatch(activarModalResult({
             success:false,
-            title:"Error al obtetner los periodos",
+            title:"Error al obtener los periodos",
             message:error.response.data.error,
         }))
     })
