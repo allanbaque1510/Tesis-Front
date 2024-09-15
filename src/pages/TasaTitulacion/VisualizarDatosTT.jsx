@@ -12,8 +12,6 @@ import ExcelService from '../../api/Services/ExcelService';
 const VisualizarDatosTT = () => {
     const [comboPeriodo, setComboPeriodo] = useState([])
     const [comboCarreras, setComboCarreras] = useState([])
-    const [comboTipoGrafico, setComboTipoGrafico] = useState([])
-    const [tipoGrafico, setTipoGrafico] = useState(0)
     const [existeConfigCarrera, setExisteConfigCarrera] = useState(true)
     const [dataReferencia, setDataReferencia] = useState([])
     const [dataSource, setDataSource] = useState([])
@@ -79,34 +77,11 @@ const VisualizarDatosTT = () => {
               setExisteConfigCarrera(false)
             }else{
               setComboPeriodo(response.data.data.periodo)
-              setComboTipoGrafico(response?.data?.data?.tipo_grafico)
             }
         }
    })
   }
-  const registrarDatosExcel = async () =>{
-  dispatch(loadingOn());
-    await ExcelService.registrarDatosExcel({"file":archivo})
-    .then((response)=>{
-      if(response.data.ok){
-        dispatch(activarModalResult({
-          success:true,
-          title:response.data.message,
-          message:"",
-        }))
-        props.despuesCargar()
-      }
-    })
-    .catch(error=>{
-      dispatch(activarModalResult({
-        success:false,
-        title:"Error al cargar datos del excel",
-        message:error.response.data.error,
-      }))
-    })
-    .finally(()=>{dispatch(loadingOff());
-    })
-  }
+
 
   const getComboCarreras = () =>{
     UtilService.getComboCarreras()
@@ -131,8 +106,7 @@ const VisualizarDatosTT = () => {
       if(response.data.ok){
         setDataReferencia(response.data.data)
         setDataSource(response.data.data_table)
-        const valorOtro =  response.data.data.total_titulados?.value - response.data.data.titulados_nivelacion.reduce((previo,current)=>({value:previo.value+current.value})).value 
-        setDataParaGrafico([...response.data.data.titulados_nivelacion,{ value:valorOtro,label:"otros"}])
+        setDataParaGrafico(response.data.data.titulados_nivelacion)
         setDataEstudiantesPeriodo(response.data.data.titulados_nivelacion)
       }
     }) 
@@ -145,6 +119,7 @@ const VisualizarDatosTT = () => {
       })
     .finally(()=>dispatch(loadingOff()))
   }
+  console.log(dataParaGrafico)
   useEffect(() => {
     getComboCarreras()
   }, [])

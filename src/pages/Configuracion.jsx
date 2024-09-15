@@ -41,6 +41,10 @@ const Configuracion = () => {
                         cantidad_periodos:response.data.data.periodos_desercion,
                         cantidad_total_periodos:response.data.data.total_periodos,
                         cantidad_periodos_gracia:response.data.data.periodos_gracia,
+                        
+                        porcentaje_min_asistencia:response.data.data.prom_min_asistencia,
+                        nota_prom_general:response.data.data.prom_min_notas,
+
                         puntuacion:response.data.data.puntuacion,
                     })
                     setConfiguracion(response.data)
@@ -87,6 +91,25 @@ const Configuracion = () => {
         if(data.cantidad_periodos_gracia === undefined || data.cantidad_periodos_gracia === null){
             datosAlerta.push({
                 title:"Cantidad de periodos de gracia",
+                message:'Este campo no puede estar vacio'
+            });
+        }
+        if(data.porcentaje_min_asistencia === undefined || data.porcentaje_min_asistencia === null){
+            datosAlerta.push({
+                title:"Porcentaje minimo de asistencia",
+                message:'Este campo no puede estar vacio'
+            });
+        }
+        if(data.nota_prom_general === undefined || data.nota_prom_general === null){
+            datosAlerta.push({
+                title:"Nota minima de promedio general",
+                message:'Este campo no puede estar vacio'
+            });
+        }
+        
+        if(data.puntuacion === undefined || data.puntuacion === null){
+            datosAlerta.push({
+                title:"Puntuación total",
                 message:'Este campo no puede estar vacio'
             });
         }
@@ -226,10 +249,36 @@ const Configuracion = () => {
                             </Col>
                             <Col  xs={{ flex: '100%'}} sm={{ flex: '100%' }} md={{ flex: '49%' }} lg={{flex: '49%'}}xl={{flex: '49%'}}>
                                     <Card.Grid style={{width:'100%'}}>
+                                    <Alert showIcon closable description={
+                                        <>
+                                        El porcentaje minimo de asistencia es evaluado sobre <b>100%</b>, es decir si el porcentaje minimo de asistencia es <b>70%</b> ingrese <b>70</b>.
+                                        <br /> 
+                                        La nota minima del promedio general es evaluada en relacion a la <b>Puntuacion total</b> si la puntuacion total es sobre <b>10</b> y la nota minima es <b>7</b> coloque el <b>7</b> </>}/>
+                                        <h3>Tasa de reprobados</h3> 
+                                        <Form.Item
+                                            label="Porcentaje minimo de asistencia"
+                                            name="porcentaje_min_asistencia"
+                                        >
+                                        <InputNumber
+                                           style={{width:'100%'}}
+                                        />
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Nota minima de promedio general"
+                                            name="nota_prom_general"
+                                        >
+                                        <InputNumber
+                                            style={{width:'100%'}}
+                                        />
+                                        </Form.Item>
+                                    </Card.Grid>
+                            </Col>
+                            <Col  xs={{ flex: '100%'}} sm={{ flex: '100%' }} md={{ flex: '49%' }} lg={{flex: '49%'}}xl={{flex: '49%'}}>
+                                    <Card.Grid style={{width:'100%'}}>
                                         <Alert showIcon closable description={<>La puntuacion total se refiere al puntaje total sobre el que se calificaran los logros. <br /> <b>Ejemplo:</b>Si el puntaje final al sumar todos los logros es de 10, ingrese el numero 10.</>}/>
                                         <h3>Logros de aprendizaje</h3> 
                                         <Form.Item
-                                                    label="Puntuacion total"
+                                                    label="Puntuación total"
                                                     name="puntuacion"
                                                     >
                                                     <InputNumber

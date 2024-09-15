@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import {MenuFoldOutlined ,MenuUnfoldOutlined} from '@ant-design/icons';
 import { useAuth } from '../context/AuthContext';
-import { Layout, theme ,Button} from 'antd';
+import { Layout, theme ,Button,Tooltip} from 'antd';
 import Sidebar from '../components/Sidebar';
 import Cargando from '../components/Cargando';
+import {LogoutOutlined} from '@ant-design/icons';
 import MessageResult from '../components/MessageResult';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -56,7 +57,19 @@ const Contenedor = ({children}) => {
       />
     </Header>
     <Header style={{display:'flex',justifyContent:'flex-end',alignItems:'center', height:'50px'}}>
-      <Button  onClick={()=>logOut()}>Cerrar session</Button>
+    <Tooltip
+      title="Cerrar Sesión"
+    >
+      <LogoutOutlined  
+        style={{
+          backgroundColor:'white',
+          fontSize:'20px',
+          padding:'5px',
+          borderRadius:'40px'
+        }}
+        onClick={()=>logOut()} 
+      />
+    </Tooltip>
 
     </Header>
     <div style={{maxHeight:'calc(100vh - 50px)', overflowY:'auto'}}>

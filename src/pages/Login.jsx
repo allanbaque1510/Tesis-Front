@@ -70,7 +70,7 @@ const Login = () => {
                         <Input style={{color:'#727272'}} prefix={<LockOutlined style={{color:"#aaa"}} />} type="password" placeholder="Ingrese una contraseña" />
                     </Form.Item>
                     <Button loading={cargando} type="primary" style={{width:'100%'}} htmlType="submit" >
-                    Log in
+                    Iniciar Sesión
                     </Button>
                 </Form>
             </div>
